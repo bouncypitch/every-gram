@@ -1,0 +1,37 @@
+{
+ "status": "done",
+ "log": [
+  "Read 1702 Series Quad Block Motor Mount (32-2)",
+  "Downloading CAD",
+  "Claude is setting up the test",
+  "Longest extent x is the load axis, and y is taken as the stiffest transverse direction because bending in y uses the larger z depth (49.7 mm vs 26.7 mm); the part is fixed at the x-min end and loaded with 50 N transversely at the x-max end.",
+  "Original simulated: 15 g, peak 26.9 MPa",
+  "Final design: 11.0 g, peak 29.4 MPa, deflection 1.10x, pass"
+ ],
+ "info": {
+  "name": "1702 Series Quad Block Motor Mount (32-2)",
+  "material": "Aluminum 6061",
+  "load_n": 50
+ },
+ "result": {
+  "name": "1702 Series Quad Block Motor Mount (32-2)",
+  "material": "Aluminum 6061",
+  "mass_before_g": 14.5941295170532,
+  "mass_after_g": 11.017221011678123,
+  "saved_pct": 24.50922818791946,
+  "peak_before_mpa": 26.905119072967704,
+  "peak_after_mpa": 29.37626582012504,
+  "limit_mpa": 138.0,
+  "deflection_ratio": 1.0971156399000317,
+  "assumption": "Longest extent x is the load axis, and y is taken as the stiffest transverse direction because bending in y uses the larger z depth (49.7 mm vs 26.7 mm); the part is fixed at the x-min end and loaded with 50 N transversely at the x-max end.",
+  "load_n": 50,
+  "load_basis": null,
+  "status": "verified",
+  "note": "Simulation under the stated assumptions, not a physical test."
+ },
+ "files": {
+  "before": "x",
+  "after": "x",
+  "stl": "x"
+ }
+}

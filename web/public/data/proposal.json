@@ -1,0 +1,26 @@
+{
+"baseline_kg": 16.33,
+"items": [
+{
+"subsystem": "Legs",
+"mass_kg": 8.18,
+"proposed_kg": 7.49,
+"rationale": "Verified yoke and foot redesigns.",
+"status": "proposed"
+},
+{
+"subsystem": "Torso",
+"mass_kg": 4.45,
+"proposed_kg": 2.86,
+"rationale": "Repo biped torso (3.16 kg, real URDF) with a 0.3 kg lighter battery. Battery product at this size is unconfirmed.",
+"status": "proposed"
+},
+{
+"subsystem": "Arms",
+"mass_kg": 3.7,
+"proposed_kg": 0.0,
+"rationale": "Removed, using the repo biped variant. Valid only if the mission needs no hands.",
+"status": "proposed"
+}
+]
+}

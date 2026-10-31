@@ -1,0 +1,38 @@
+{
+ "status": "done",
+ "log": [
+  "Read 1111 Series Angle Pattern Bracket (1-1)",
+  "Downloading CAD",
+  "Claude is setting up the test",
+  "The bracket's longest dimension (z) is its length, so I clamp one end slice and apply the 100 N transversely (-y) at the opposite end slice to represent a cantilever-style bending load on the angle bracket.",
+  "Original simulated: 23 g, peak 72.1 MPa",
+  "Final design: 18.3 g, peak 76.8 MPa, deflection 1.05x, pass"
+ ],
+ "info": {
+  "name": "1111 Series Angle Pattern Bracket (1-1)",
+  "material": "Aluminum 6061",
+  "material_assumed": true,
+  "load_n": 100
+ },
+ "result": {
+  "name": "1111 Series Angle Pattern Bracket (1-1)",
+  "material": "Aluminum 6061",
+  "mass_before_g": 23.425489170937173,
+  "mass_after_g": 18.332344036505823,
+  "saved_pct": 21.7418944691672,
+  "peak_before_mpa": 72.1373118879514,
+  "peak_after_mpa": 76.77679222706907,
+  "limit_mpa": 138.0,
+  "deflection_ratio": 1.0526191305924002,
+  "assumption": "The bracket's longest dimension (z) is its length, so I clamp one end slice and apply the 100 N transversely (-y) at the opposite end slice to represent a cantilever-style bending load on the angle bracket.",
+  "load_n": 100,
+  "load_basis": null,
+  "status": "verified",
+  "note": "Simulation under the stated assumptions, not a physical test."
+ },
+ "files": {
+  "before": "x",
+  "after": "x",
+  "stl": "x"
+ }
+}
