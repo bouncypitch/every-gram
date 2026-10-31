@@ -3,6 +3,7 @@ import json,os,pickle,zipfile,numpy as np,trimesh,glob
 from scipy import ndimage as ni
 from skimage import measure
 import jobs,lighten
+from review import holes_rim,thickness
 D='web/public/data/'; P=D+'parts/'; M=jobs.M
 robot=json.load(open(D+'robot.json')); parts={p['id']:p for p in robot['parts']}
 LIM=30e6; RHO0=1346; RHO=1150; USD_KG=7000
@@ -27,12 +28,25 @@ def match(design,target):
     r=best[2].copy(); r.apply_transform(best[0]); return r
 os.makedirs('out/design',exist_ok=True); summary={}
 for k,job in jobs.JOBS.items():
-    cands=[('Topology removal',f'out/topo_{k}.pkl')]+[(n,f'out/pat_{k}_{p}.pkl') for n,p in (('Honeycomb','honeycomb'),('Isogrid','isogrid'),('Hollow core','hollow'))]
+    pre='v2_' if k in('yoke','foot') else ''   # yoke and foot use the reruns with hole rims and 2 mm walls
+    cands=[('Topology removal',f'out/{pre}topo_{k}.pkl')]+[(n,f'out/{pre}pat_{k}_{p}.pkl') for n,p in (('Honeycomb','honeycomb'),('Isogrid','isogrid'),('Hollow core','hollow'))]
     found=[(n,pickle.load(open(f,'rb'))['best']) for n,f in cands if os.path.exists(f)]
     found=[(n,b) for n,b in found if b is not None]
     if not found: continue
     strat,b=min(found,key=lambda x:x[1]['fill'])
-    h=job['h']; s,g=lighten.voxelize(job['mesh'],h)
+    h=.001 if pre and strat=='Honeycomb' else job['h']; s,g=lighten.voxelize(job['mesh'],h)
+    if s.shape!=b['solid'].shape: raise ValueError('grid mismatch '+k)
+    hl,rimm,nh=holes_rim(s,h); lab,pieces=ni.label(b['solid']); rim=float((b['solid']&rimm).sum()/max(rimm.sum(),1)); thin=thickness(b['solid'],h)
+    issues=[]
+    if rim<.97: issues.append(f'{1-rim:.0%} of the 3 mm rim around bolt holes was removed')
+    if thin>.25: issues.append(f'{thin:.0%} of the material is thin ribs or walls; check print quality')
+    if strat in('Honeycomb','Hollow core','Isogrid'): issues.append('Internal cavities need a print path and a way to clear support or powder')
+    issues.append('Fit, fatigue and impact are untested')
+    verdict='fail' if rim<.85 or pieces>1 else 'warn'
+    changes={'Topology removal':['Removed low-stress regions through the plate','Kept the load path, supports and bolt rims'],'Honeycomb':['Replaced the solid core with hexagonal cells','Kept outer skins, supports and bolt rims'],'Hollow core':['Hollowed the interior','Kept outer walls, supports and bolt rims'],'Isogrid':['Replaced the core with triangular ribs','Kept outer skins, supports and bolt rims']}[strat]
+    review=dict(holes=int(nh),rim_kept=rim,thin_fraction=thin,pieces=int(pieces),verdict=verdict,changes=changes,issues=issues)
+    rm=s&~b['solid']; ghost=surf(rm,np.zeros_like(rm,float),g,h,30000) if rm.sum() else None
+    if ghost is not None: ghost.visual.vertex_colors=[255,122,26,255]
     src=trimesh.load(job['mesh'],force='mesh'); des=surf(b['solid'],b['vm'],g,h)
     des.export(f'out/design/{k}_nylon_cf.stl')
     m0=s.sum()*h**3*RHO0*1e3; m1=b['solid'].sum()*h**3*RHO*1e3; saved=m0-m1
@@ -49,7 +63,8 @@ for k,job in jobs.JOBS.items():
             for o in others: o.visual.vertex_colors=[150,152,158,255]
             scene=trimesh.util.concatenate(others+[placed]) if others else placed
             scene.export(P+f'{link}_opt.glb'); p['mesh_opt']=f'parts/{link}_opt.glb'
-        p['mass_opt_g']=round(p['mass_g']-saved,1); p['status']='verified'
+        p['mass_opt_g']=round(p['mass_g']-saved,1); p['status']='verified'; p['review']=review
+        if ghost is not None and n==0: ghost.export(P+f'{link}_removed.glb')
         sf=30/(b['peak']/1e6); kg=saved/1000
         p['checks']={
          'mechanical':dict(status='pass',summary=f"Peak {b['peak']/1e6:.1f} of 30 MPa, deflection {b['dr']:.2f}x original. Case: {job['load_note']}.",basis='simulated'),
@@ -66,9 +81,9 @@ mats=[]
 for f in glob.glob('out/mat_*.json'):
     d=json.load(open(f)); mats+=[dict(part=d['part'],**{k:v for k,v in r.items() if k in('material','process','mass_g','saved_pct','sf','stiff_vs_orig','feasible')}) for r in d['results']]
 json.dump(mats,open(D+'materials.json','w'),indent=0)
-legs=sum((v['m0']-v['m1'])*v['n'] for k,v in summary.items() if k in('yoke','foot'))/1000
+legs=sum((v['m0']-v['m1'])*v['n'] for k,v in summary.items() if k in('yoke','foot','hip'))/1000
 json.dump(dict(baseline_kg=16.33,items=[
- dict(subsystem='Legs',mass_kg=8.18,proposed_kg=round(8.18-legs,2),rationale='Verified yoke and foot redesigns.',status='proposed'),
+ dict(subsystem='Legs',mass_kg=8.18,proposed_kg=round(8.18-legs,2),rationale='Verified yoke, foot and hip redesigns.',status='proposed'),
  dict(subsystem='Torso',mass_kg=4.45,proposed_kg=2.86,rationale='Repo biped torso (3.16 kg, real URDF) with a 0.3 kg lighter battery. Battery product at this size is unconfirmed.',status='proposed'),
  dict(subsystem='Arms',mass_kg=3.70,proposed_kg=0.0,rationale='Removed, using the repo biped variant. Valid only if the mission needs no hands.',status='proposed')]),open(D+'proposal.json','w'),indent=0)
 open('out/design/README.md','w').write('# Every Gram design pack\n\nBerkeley Humanoid Lite parts redesigned in Nylon 12 + CF. Results are simulation only, with typical datasheet properties and assumed load cases. Fatigue, impact, thermal and print behavior are untested. Do not use for safety-critical parts without engineering review.\n\n'+'\n'.join(f"- {k}: {v['m0']:.1f} g to {v['m1']:.1f} g, peak {v['peak']:.1f}/30 MPa, deflection {v['dr']:.2f}x, case: {v['note']}" for k,v in summary.items())+'\n')

@@ -3,6 +3,7 @@ import io,json,os,re,time,uuid,zipfile,ipaddress,socket,urllib.request,urllib.pa
 from scipy import ndimage as ni
 from skimage import measure
 import fe,lighten
+from review import holes_rim
 for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'.env')):
     if '=' in l: k,v=l.strip().split('=',1); os.environ.setdefault(k,v)
 MATERIALS={ # typical datasheet values; allowable is yield or ultimate over 2
@@ -78,7 +79,7 @@ def optimize(path,mat,force,case,log,max_voxels=25000,iters=10):
     if fixed.sum()<5 or lm.sum()<5: raise ValueError('Support or load region missed the part')
     F=np.array(case['load']['direction'],float); F=F/np.linalg.norm(F)*force
     M=MATERIALS[mat]; E=M['E']; loads=[(lm,F)]
-    near=ni.binary_dilation(fixed|lm,iterations=2); keep=ni.binary_dilation(fixed|lm,iterations=2)&s
+    near=ni.binary_dilation(fixed|lm,iterations=2); keep=(ni.binary_dilation(fixed|lm,iterations=2)&s)|holes_rim(s,h)[1]   # bolt holes keep a 3 mm rim
     r=fe.solve(s,h,E,.33,fixed,loads,tol=1e-5); d0=lighten.tip(r,lm,s); p0=lighten.peak(r['vm'],s,near); V=int(s.sum())
     log(f'Original simulated: {V*h**3*M["rho"]*1e3:.0f} g, peak {p0/1e6:.1f} MPa')
     if p0>M['allow']: raise ValueError(f'Original already exceeds the {M["allow"]/1e6:.0f} MPa limit at this load, so the load case needs review')
@@ -87,7 +88,7 @@ def optimize(path,mat,force,case,log,max_voxels=25000,iters=10):
         w=ni.gaussian_filter(d.astype(float),1.5)+1e-9; sens=ni.gaussian_filter(rs['vm'],1.5)/w
         c=np.sort(sens[d&~keep]); n=int(d.sum()*step)
         if n>=len(c): break
-        nd=lighten.largest((d&(sens>c[n]))|keep)
+        nd=lighten.largest(ni.binary_opening(d&(sens>c[n]),iterations=1)|keep)
         if not (nd&fixed).any() or not (nd&lm).any():
             step/=2; fails+=1
             if fails>3: break

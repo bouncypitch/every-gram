@@ -2,11 +2,12 @@ import '@fontsource-variable/inter';
 import './style.css';
 import {
   AGENTS, TIERS, dataUrl, designOptions, effective, fmtMass, fmtUsd, isKnownRobot,
-  loadMaterials, loadProposal, loadRobot, totals,
-  type MaterialRow, type Part, type Proposal, type RobotDoc, type Selection, type Status, type Tier,
+  loadMaterials, loadMug, loadProposal, loadRobot, totals,
+  type MaterialRow, type Mug, type Part, type Proposal, type RobotDoc, type Selection, type Status, type Tier,
 } from './data';
 import { Viewer, type Shot } from './viewer';
 import { createProductFlow } from './product';
+import { changesHtml, reviewHtml } from './review';
 
 // Launch price is a citation constant, not a result.
 const USD_PER_KG = 7000;
@@ -20,6 +21,7 @@ const params = new URLSearchParams(location.search);
 let doc: RobotDoc | null = null;
 let materials: MaterialRow[] | null = null;
 let proposal: Proposal | null = null;
+let mug: Mug | null = null;
 let ready = false;
 let loadFailed = false;
 
@@ -34,6 +36,12 @@ let stress = false;
 let colorBy: 'mass' | 'status' = 'mass';
 let sheet: '' | 'materials' | 'robot' = '';
 let zipOk: boolean | null = null;
+let cut = false;
+let changes = false;
+let explore = false;
+let storyReturn = 0;
+let story: { show(): void; hide(): void; resume(): void; goto(id: string): void; palette: Record<string, string> } | null = null;
+const storyOpen = () => !!document.body.dataset.story;
 const sel: Selection = { global: '', perPart: {} };
 
 const viewer = new Viewer($<HTMLCanvasElement>('gl'), (id) => {
@@ -120,7 +128,7 @@ function enter(s: number) {
   stepElapsed = 0;
   document.body.dataset.stage = String(s);
   openPanel(null);
-  if (s < 3) { cursor = -1; after = false; }
+  if (s < 3) { cursor = -1; after = false; changes = false; viewer.setChanges(false); }
   if (s === 3) { cursor = 0; }
   viewer.setExplode(s === 2 || s === 3);
   viewer.setShot(shotFor(s));
@@ -173,22 +181,25 @@ function renderToolsSoon() { clearTimeout(toolsT); toolsT = window.setTimeout(re
 function renderTools() {
   const el = $('tools');
   const groups: string[] = [];
-  if (stage === 2) groups.push(seg('color', [['mass', 'Mass'], ['status', 'Status']], colorBy));
-  if (stage >= 3 && parts().some((p) => effective(p, sel).mesh)) {
-    groups.push(seg('view', [['before', 'Before'], ['after', 'After']], after ? 'after' : 'before'));
-    if (after && parts().some((p) => viewer.hasStress(p.id))) groups.push(seg('stress', [['off', 'Solid'], ['on', 'Stress']], stress ? 'on' : 'off'));
+  if (stage === 2 && !explore) groups.push(seg('color', [['mass', 'Mass'], ['status', 'Status']], colorBy));
+  if ((stage >= 3 || explore) && parts().some((p) => effective(p, sel).mesh)) {
+    groups.push(seg('view', viewOpts(), viewVal()));
+    if (after && !changes && parts().some((p) => viewer.hasStress(p.id))) groups.push(seg('stress', [['off', 'Solid'], ['on', 'Stress']], stress ? 'on' : 'off'));
   }
   const opts = designOptions(parts());
   if (stage >= 3 && opts.length) groups.push(seg('design', [['', 'Default'], ...opts.map((o): [string, string] => [o.id, o.label])], sel.global));
   el.innerHTML = groups.join('');
 }
+const viewOpts = (): [string, string][] => [['before', 'Before'], ['after', 'After'], ...(viewer.hasRemoved() ? [['changes', 'Changes'] as [string, string]] : [])];
+const viewVal = () => (changes ? 'changes' : after ? 'after' : 'before');
 const seg = (name: string, opts: [string, string][], val: string) =>
   `<div class="seg" data-seg="${name}">${opts.map(([v, l]) => `<button data-v="${esc(v)}" class="${v === val ? 'on' : ''}">${esc(l)}</button>`).join('')}</div>`;
 
 function onSeg(name: string, v: string) {
   if (name === 'color') { colorBy = v as typeof colorBy; viewer.setColorMode(colorBy); viewer.setStatuses(allStatuses()); renderCopy(); renderTools(); }
-  if (name === 'view') { after = v === 'after'; viewer.setView(after, stress); renderTools(); renderPanelToggles(); }
+  if (name === 'view') { after = v !== 'before'; changes = v === 'changes'; viewer.setChanges(changes); viewer.setView(after, stress); renderTools(); renderPanelToggles(); }
   if (name === 'stress') { stress = v === 'on'; viewer.setView(after, stress); renderTools(); renderPanelToggles(); }
+  if (name === 'cut') { cut = v === 'on'; viewer.setCut(cut ? selected : null); renderPanelToggles(); }
   if (name === 'design') { sel.global = v; sel.perPart = {}; selectionChanged(); }
   if (name === 'part-design' && selected) { sel.perPart[selected] = v; selectionChanged(); }
 }
@@ -230,6 +241,7 @@ function stepTo(i: number) {
 // ---------- Part panel ----------
 function openPanel(id: string | null) {
   selected = id;
+  if (cut) { cut = false; viewer.setCut(null); }
   viewer.setSelected(id);
   $('panel').classList.toggle('open', !!id);
   document.body.classList.toggle('inspecting', !!id);
@@ -263,7 +275,8 @@ function renderPanel() {
       return c
         ? `<li class="${esc(c.status)}"><span class="ck-name">${name}</span><span class="ck-state">${SHORT[c.status] ?? esc(c.status)}</span><span class="ck-sum">${esc(c.summary)}</span><span class="ck-basis">${esc(c.basis)}</span></li>`
         : `<li class="none"><span class="ck-name">${name}</span><span class="ck-state">NOT RUN</span></li>`;
-    }).join('')}</ul></div>`;
+    }).join('')}</ul></div>
+    ${changesHtml(p)}${reviewHtml(p)}`;
   $('panel-close').onclick = () => openPanel(null);
   renderPanelToggles();
 }
@@ -272,8 +285,10 @@ function renderPanelToggles() {
   const box = document.getElementById('panel-toggles');
   if (!box || !selected) return;
   if (!viewer.hasOpt(selected)) { box.innerHTML = ''; return; }
-  box.innerHTML = `<div class="block row">${seg('view', [['before', 'Before'], ['after', 'After']], after ? 'after' : 'before')}
-    ${after && viewer.hasStress(selected) ? seg('stress', [['off', 'Solid'], ['on', 'Stress']], stress ? 'on' : 'off') : ''}</div>`;
+  box.innerHTML = `<div class="block row">${seg('view', viewOpts(), viewVal())}
+    ${after && !changes && viewer.hasStress(selected) ? seg('stress', [['off', 'Solid'], ['on', 'Stress']], stress ? 'on' : 'off') : ''}
+    ${changes && viewer.hasRemoved(selected) ? '<p class="note legend-r"><i></i>Removed material</p>' : ''}
+    ${after ? seg('cut', [['off', 'Shell'], ['on', 'Cutaway']], cut ? 'on' : 'off') : ''}</div>`;
 }
 
 // ---------- Summary ----------
@@ -337,9 +352,11 @@ function renderSummary() {
       <span class="num path-n">${esc(lever.subsystem)}: ${lever.mass_kg!.toFixed(2)} to ${lever.proposed_kg!.toFixed(2)} kg</span>
       <span class="path-l">Largest of ${proposal!.items.length} whole-robot levers. Separate options, not added up and not part of the savings above.</span>
     </button>` : ''}
+    <button class="link st-link" id="to-story">See how it got lighter</button>
     ${zipOk ? `<a class="cta" href="${dataUrl('every-gram-design.zip')}" download>Download the design</a>` : `<span class="cta off">${zipOk === null ? 'Checking design package' : 'Design package not available yet'}</span>`}`;
   const b = document.getElementById('open-path');
   if (b) b.onclick = () => openSheet('robot');
+  $('to-story').onclick = () => void openStory();
 }
 
 // ---------- Sheets ----------
@@ -447,7 +464,7 @@ function reset() {
 const lastPartWithResult = (p?: Part) => !!p && (effective(p, sel).mass != null || Object.keys(p.checks ?? {}).length > 0);
 
 setInterval(() => {
-  const paused = !!selected || !!sheet || product.active() || product.busy();
+  const paused = !!selected || !!sheet || product.active() || product.busy() || storyOpen();
   if (paused || stage === 0 && !(auto && isKnownRobot($<HTMLInputElement>('link').value))) return;
   if (stage === 3 && cursor < parts().length - 1) {
     stepElapsed += 100;
@@ -464,6 +481,11 @@ addEventListener('keydown', (e) => {
   if (product.active()) {
     if (e.key === 'Escape') product.exit();
     return; // the product flow has real form fields; the stage keys stay out of its way
+  }
+  if (storyOpen()) {
+    if (e.key !== 'Escape') return; // Space scrolls the page in the story
+    if (sheet) openSheet(''); else if (selected) openPanel(null); else if (explore) leaveExplore(); else closeStory();
+    return;
   }
   const inField = (e.target as HTMLElement).tagName === 'INPUT';
   if (e.code === 'Space') {
@@ -484,22 +506,74 @@ addEventListener('keydown', (e) => {
 function toggleAuto() { auto = !auto; stageElapsed = 0; renderSteps(); }
 
 $<HTMLFormElement>('link-form').addEventListener('submit', (e) => { e.preventDefault(); void submitLink(); });
-void product.chips().then((list) => {
-  $('chips').innerHTML = list.map((c) => `<button type="button" data-url="${esc(c.url)}">${esc(c.label)}</button>`).join('');
+void Promise.all([product.chips(), loadMug()]).then(([list, m]) => {
+  mug = m;
+  $('chips').innerHTML = list.map((c) => `<button type="button" data-url="${esc(c.url)}">${esc(c.label)}</button>`).join('')
+    + (m ? `<button type="button" class="chip-mug" data-mug="1">${esc(m.title)}</button>` : '');
 });
 $('chips').addEventListener('click', (e) => {
+  if ((e.target as HTMLElement).closest('[data-mug]')) return void openStory('st-mug');
   const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-url]');
   if (!b) return;
   $<HTMLInputElement>('link').value = b.dataset.url!;
   b.blur();
   void submitLink();
 });
+$('story-link').onclick = () => void openStory();
+$('nav-story').onclick = () => void openStory();
 $('home').onclick = () => { reset(); $('home').blur(); };
 $('nav-auto').onclick = () => { toggleAuto(); $('nav-auto').blur(); };
 $('nav-materials').onclick = () => { openSheet('materials'); $('nav-materials').blur(); };
 $('nav-robot').onclick = () => { openSheet('robot'); $('nav-robot').blur(); };
 $('sheet').addEventListener('click', (e) => { if (e.target === $('sheet')) openSheet(''); });
 addEventListener('resize', () => { if (stage) viewer.setShot(shotFor(stage)); });
+
+// The story loads on demand so the stage flow never pays for it.
+let readyResolve: () => void;
+const robotReady = new Promise<void>((r) => (readyResolve = r));
+
+async function openStory(anchor?: string) {
+  if (!doc || storyOpen()) return;
+  storyReturn = stage;
+  openPanel(null);
+  document.body.dataset.story = 'read';
+  await robotReady;
+  const { createStory } = await import('./story');
+  if (!storyOpen()) return;
+  story ??= createStory({
+    viewer, doc, proposal, mug: mug ?? await loadMug(), sel, ready: () => robotReady, preloadOpt,
+    onClose: closeStory, onExplore: enterExplore, onLeaveExplore: leaveExplore,
+  });
+  story.show();
+  if (anchor) story.goto(anchor);
+}
+
+function closeStory() {
+  explore = false;
+  delete document.body.dataset.story;
+  story?.hide();
+  after = false;
+  cut = false;
+  enter(storyReturn);
+}
+
+function enterExplore() {
+  explore = true;
+  document.body.dataset.story = 'explore';
+  enter(2);
+  after = true;
+  viewer.setPalette(story!.palette);
+  viewer.setView(true, stress);
+  renderTools();
+}
+
+function leaveExplore() {
+  explore = false;
+  openPanel(null);
+  document.body.dataset.story = 'read';
+  $('tools').innerHTML = '';
+  story?.resume();
+}
 
 async function boot() {
   buildTiers();
@@ -511,6 +585,9 @@ async function boot() {
   try {
     await viewer.load(doc.parts, (d, n) => { if (pendingStart) setMsg(`Loading model, ${d} of ${n} parts.`); });
     ready = true;
+    readyResolve();
+    if (location.hash === '#story') void openStory();
+    if (location.hash === '#mug') void openStory('st-mug');
     if (pendingStart) { setMsg(''); enter(1); }
   } catch {
     loadFailed = true;

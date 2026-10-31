@@ -4,8 +4,8 @@
 {
 "subsystem": "Legs",
 "mass_kg": 8.18,
-"proposed_kg": 7.49,
-"rationale": "Verified yoke and foot redesigns.",
+"proposed_kg": 7.44,
+"rationale": "Verified yoke, foot and hip redesigns.",
 "status": "proposed"
 },
 {

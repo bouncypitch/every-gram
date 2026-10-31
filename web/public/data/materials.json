@@ -1,5 +1,57 @@
 [
 {
+"part": "hip",
+"material": "PLA (baseline)",
+"process": "FDM",
+"feasible": false
+},
+{
+"part": "hip",
+"material": "PETG",
+"process": "FDM",
+"feasible": false
+},
+{
+"part": "hip",
+"material": "Nylon 12 + CF",
+"process": "FDM",
+"feasible": true,
+"mass_g": 64.97945279999998,
+"saved_pct": 31.0202675824085,
+"sf": 1.0365689514955374,
+"stiff_vs_orig": 0.44575111498686226
+},
+{
+"part": "hip",
+"material": "PEEK + CF",
+"process": "High-temp FDM",
+"feasible": true,
+"mass_g": 66.11431679999998,
+"saved_pct": 29.81553883082445,
+"sf": 1.4193898258602633,
+"stiff_vs_orig": 0.4867705998808927
+},
+{
+"part": "hip",
+"material": "AlSi10Mg",
+"process": "Metal LPBF",
+"feasible": true,
+"mass_g": 126.08944703999997,
+"saved_pct": -33.85179380121337,
+"sf": 2.3656497097671054,
+"stiff_vs_orig": 0.076492522838426
+},
+{
+"part": "hip",
+"material": "Ti-6Al-4V",
+"process": "Metal LPBF",
+"feasible": true,
+"mass_g": 209.20458815999996,
+"saved_pct": -122.08368784246262,
+"sf": 9.462598839068422,
+"stiff_vs_orig": 0.04867705998808928
+},
+{
 "part": "yoke",
 "material": "PLA (baseline)",
 "process": "FDM",
@@ -54,6 +106,58 @@
 "saved_pct": -127.61964749310759,
 "sf": 54.62935388756716,
 "stiff_vs_orig": 0.03981945570529945
+},
+{
+"part": "arm",
+"material": "PLA (baseline)",
+"process": "FDM",
+"feasible": false
+},
+{
+"part": "arm",
+"material": "PETG",
+"process": "FDM",
+"feasible": false
+},
+{
+"part": "arm",
+"material": "Nylon 12 + CF",
+"process": "FDM",
+"feasible": true,
+"mass_g": 84.87331199999998,
+"saved_pct": 34.78094542659023,
+"sf": 1.071855412653838,
+"stiff_vs_orig": 0.3926294506643337
+},
+{
+"part": "arm",
+"material": "PEEK + CF",
+"process": "High-temp FDM",
+"feasible": true,
+"mass_g": 68.42223359999998,
+"saved_pct": 47.42241957998539,
+"sf": 1.3536324047669261,
+"stiff_vs_orig": 0.45624315080844574
+},
+{
+"part": "arm",
+"material": "AlSi10Mg",
+"process": "Metal LPBF",
+"feasible": true,
+"mass_g": 130.49097407999997,
+"saved_pct": -0.27295694388500547,
+"sf": 2.256054007944877,
+"stiff_vs_orig": 0.07169535226989861
+},
+{
+"part": "arm",
+"material": "Ti-6Al-4V",
+"process": "Metal LPBF",
+"feasible": true,
+"mass_g": 216.50749631999997,
+"saved_pct": -66.37048661476055,
+"sf": 9.024216031779508,
+"stiff_vs_orig": 0.04562431508084457
 },
 {
 "part": "foot",

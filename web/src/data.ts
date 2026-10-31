@@ -14,7 +14,9 @@ export interface Part {
   mesh: string; mesh_opt: string | null;
   checks: Partial<Record<Agent, Check>>;
   designs?: Design[];
+  review?: Review;
 }
+export interface Review { holes?: number; rim_kept?: number; thin_fraction?: number; pieces?: number; verdict?: string; changes?: string[]; issues?: string[] }
 export interface RobotDoc { robot: { name: string; source: string; mass_kg: number }; parts: Part[] }
 
 export interface MaterialRow {
@@ -89,6 +91,13 @@ export function designOptions(parts: Part[]): { id: string; label: string }[] {
 
 const CANON = /^(www\.)?github\.com\/hybridrobotics\/berkeley-humanoid-lite(\.git)?(\/.*)?$/i;
 export const isKnownRobot = (raw: string) => CANON.test(raw.trim().replace(/^https?:\/\//i, '').replace(/[?#].*$/, ''));
+
+export interface MugDesign { design: string; mass_g: number; saved_pct: number; peak_mpa: number | null; limit_mpa: number | null; tradeoff?: string; basis: string; status: string; pick?: string }
+export interface Mug { title: string; subject?: string; load?: string; designs: MugDesign[]; before: string; after: string; sense?: string[]; line?: string }
+export async function loadMug(): Promise<Mug | null> {
+  const d = await json('mug.json');
+  return d && Array.isArray(d.designs) && d.designs.length ? d : null;
+}
 
 export const fmtMass = (g: number) => {
   const a = Math.abs(g);

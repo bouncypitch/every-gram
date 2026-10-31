@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#08090a" />
+  <meta name="theme-color" content="#0d0b26" />
   <title>Every Gram</title>
   <meta name="description" content="Every gram has to justify itself. AI proposes, physics decides." />
 </head>
@@ -13,6 +13,7 @@
   <header class="top">
     <button class="mark" id="home">Every Gram</button>
     <nav>
+      <button id="nav-story">Story</button>
       <button id="nav-materials">Materials</button>
       <button id="nav-robot">Whole robot</button>
       <button id="nav-auto" aria-pressed="false">Auto</button>
@@ -20,7 +21,7 @@
   </header>
 
   <main class="landing" id="landing">
-    <h1>Every gram has to<br />justify itself.</h1>
+    <h1>Every <em>gram</em> has to<br />justify itself.</h1>
     <p class="sub">Paste a robot. AI proposes, physics decides.</p>
     <form id="link-form">
       <input id="link" type="url" spellcheck="false" autocomplete="off" aria-label="Robot link"
@@ -29,6 +30,7 @@
     </form>
     <div class="chips" id="chips"></div>
     <p class="msg" id="link-msg" role="status"></p>
+    <button class="story-link" id="story-link">See how it got lighter</button>
   </main>
 
   <section class="prod" id="prod" aria-live="polite"></section>
