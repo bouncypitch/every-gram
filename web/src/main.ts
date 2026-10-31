@@ -29,7 +29,8 @@ let stage = 0;
 let cursor = -1;            // current part in the optimize sequence
 let stepElapsed = 0;
 let stageElapsed = 0;
-let auto = params.get('autoplay') === '1';
+let auto = params.get('autoplay') !== '0'; // the show plays itself; ?autoplay=0 hands control to Space
+let landingHeld = false; // touching the landing page stops it starting on its own
 let selected: string | null = null;
 let after = false;
 let stress = false;
@@ -465,7 +466,7 @@ const lastPartWithResult = (p?: Part) => !!p && (effective(p, sel).mass != null 
 
 setInterval(() => {
   const paused = !!selected || !!sheet || product.active() || product.busy() || storyOpen();
-  if (paused || stage === 0 && !(auto && isKnownRobot($<HTMLInputElement>('link').value))) return;
+  if (paused || stage === 0 && (landingHeld || !(auto && isKnownRobot($<HTMLInputElement>('link').value)))) return;
   if (stage === 3 && cursor < parts().length - 1) {
     stepElapsed += 100;
     if (stepElapsed >= (lastPartWithResult(parts()[cursor]) ? STEP_RESULT : STEP_EMPTY)) { stepElapsed = 0; stepTo(cursor + 1); }
@@ -473,7 +474,7 @@ setInterval(() => {
   }
   if (!auto) return;
   stageElapsed += 100;
-  if (stage === 0 ? ready && stageElapsed > 1500 : DWELL[stage] > 0 && stageElapsed >= DWELL[stage]) { stageElapsed = 0; advance(); }
+  if (stage === 0 ? ready && stageElapsed > 4000 : DWELL[stage] > 0 && stageElapsed >= DWELL[stage]) { stageElapsed = 0; advance(); }
 }, 100);
 
 addEventListener('keydown', (e) => {
@@ -506,6 +507,8 @@ addEventListener('keydown', (e) => {
 function toggleAuto() { auto = !auto; stageElapsed = 0; renderSteps(); }
 
 $<HTMLFormElement>('link-form').addEventListener('submit', (e) => { e.preventDefault(); void submitLink(); });
+$<HTMLFormElement>('link-form').addEventListener('pointerdown', () => { landingHeld = true; });
+$<HTMLInputElement>('link').addEventListener('input', () => { landingHeld = true; });
 void Promise.all([product.chips(), loadMug()]).then(([list, m]) => {
   mug = m;
   $('chips').innerHTML = list.map((c) => `<button type="button" data-url="${esc(c.url)}">${esc(c.label)}</button>`).join('')
