@@ -432,7 +432,7 @@ const product = createProductFlow({
 async function submitLink() {
   if (product.busy()) return;
   const raw = $<HTMLInputElement>('link').value.trim();
-  if (!raw) return setMsg('Paste a link to a robot.');
+  if (!raw) return setMsg('Enter a robot or product link.');
   if (isKnownRobot(raw)) {
     if (loadFailed || !doc) return setMsg('The robot data could not be loaded.');
     if (!ready) { setMsg('Loading model.'); pendingStart = true; return; }

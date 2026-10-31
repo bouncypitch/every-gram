@@ -289,3 +289,5 @@ body[data-story="read"] .top { display: none; }
 .legend-r i { width: 11px; height: 11px; border-radius: 3px; background: var(--removed); }
 
 .chips button.chip-mug { color: #19e0d0; }
+
+.note-static { margin: 10px 0 0; font-size: 13px; opacity: .7; }
