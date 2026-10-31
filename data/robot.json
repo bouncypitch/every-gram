@@ -1,0 +1,1567 @@
+{
+"robot": {
+"name": "Berkeley Humanoid Lite",
+"source": "https://github.com/HybridRobotics/Berkeley-Humanoid-Lite",
+"mass_kg": 16.33
+},
+"parts": [
+{
+"id": "base",
+"label": "Torso",
+"group": "torso",
+"mass_g": 4444.01,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+0.0,
+0.0,
+0.0,
+0.0,
+1.0,
+0.0,
+0.0,
+0.0,
+0.0,
+1.0,
+0.0,
+-0.0030965,
+0.0002648,
+0.675059,
+1.0
+],
+"explode": [
+0.0,
+0.0,
+0.0
+],
+"mesh": "parts/base.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "imu_2",
+"label": "IMU board",
+"group": "torso",
+"mass_g": 1.98,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+0.0,
+-0.0,
+0.0,
+-0.0,
+1.0,
+0.0,
+0.0,
+-0.0,
+-0.0,
+1.0,
+0.0,
+0.061722,
+-0.0,
+0.6825,
+1.0
+],
+"explode": [
+0.34,
+0.0,
+0.12
+],
+"mesh": "parts/imu_2.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_left_shoulder_pitch",
+"label": "Left shoulder pitch link",
+"group": "arm",
+"mass_g": 342.88,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+0.0,
+0.0,
+0.0,
+-0.0,
+1.0,
+0.0,
+0.0,
+-0.0,
+0.0,
+1.0,
+0.0,
+-0.0066123,
+0.1726144,
+0.7641159,
+1.0
+],
+"explode": [
+-0.0038,
+0.4908,
+0.2193
+],
+"mesh": "parts/arm_left_shoulder_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_left_shoulder_roll",
+"label": "Left shoulder roll link",
+"group": "arm",
+"mass_g": 443.94,
+"mass_opt_g": 402.8,
+"status": "verified",
+"matrix": [
+1.0,
+2.6e-06,
+8e-07,
+0.0,
+-2.6e-06,
+1.0,
+-3.7e-06,
+0.0,
+-8e-07,
+3.7e-06,
+1.0,
+0.0,
+-0.0022329,
+0.1951137,
+0.6928475,
+1.0
+],
+"explode": [
+-0.0047,
+0.5388,
+0.201
+],
+"mesh": "parts/arm_left_shoulder_roll.glb",
+"mesh_opt": "parts/arm_left_shoulder_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 28.8 of 30 MPa, deflection 0.40x original. Case: 250 N side load, from 20 N m joint limit at 80 mm.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$288 launch saving per part. Uses 89 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.25%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Hollow core, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 402.8,
+"mesh": "parts/arm_left_shoulder_roll_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.03251524151946228,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Hollowed the interior",
+"Kept outer walls, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "arm_left_shoulder_yaw",
+"label": "Left shoulder yaw link",
+"group": "arm",
+"mass_g": 329.2,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+3.5e-06,
+-2.7e-06,
+0.0,
+-3.5e-06,
+1.0,
+-1e-05,
+0.0,
+2.7e-06,
+1e-05,
+1.0,
+0.0,
+9.16e-05,
+0.2259899,
+0.6076622,
+1.0
+],
+"explode": [
+0.003,
+0.6198,
+0.1644
+],
+"mesh": "parts/arm_left_shoulder_yaw.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_left_elbow_pitch",
+"label": "Left elbow pitch link",
+"group": "arm",
+"mass_g": 443.94,
+"mass_opt_g": 402.8,
+"status": "verified",
+"matrix": [
+1.0,
+-2.9e-06,
+-7.2e-06,
+0.0,
+2.9e-06,
+1.0,
+-1.47e-05,
+0.0,
+7.2e-06,
+1.47e-05,
+1.0,
+0.0,
+3.98e-05,
+0.2411604,
+0.5333297,
+1.0
+],
+"explode": [
+0.003,
+0.6315,
+0.1462
+],
+"mesh": "parts/arm_left_elbow_pitch.glb",
+"mesh_opt": "parts/arm_left_elbow_pitch_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 28.8 of 30 MPa, deflection 0.40x original. Case: 250 N side load, from 20 N m joint limit at 80 mm.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$288 launch saving per part. Uses 89 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.25%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Hollow core, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 402.8,
+"mesh": "parts/arm_left_elbow_pitch_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.03251524151946228,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Hollowed the interior",
+"Kept outer walls, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "arm_left_elbow_roll",
+"label": "Left elbow roll link",
+"group": "arm",
+"mass_g": 0.83,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+-1e-06,
+-3.9e-06,
+0.0,
+1e-06,
+1.0,
+-1e-05,
+0.0,
+3.9e-06,
+1e-05,
+1.0,
+0.0,
+-5e-07,
+0.2530564,
+0.4803037,
+1.0
+],
+"explode": [
+0.003,
+0.661,
+0.12
+],
+"mesh": "parts/arm_left_elbow_roll.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_left_hand_link",
+"label": "Left hand",
+"group": "arm",
+"mass_g": 291.74,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+4.2e-06,
+-5.3e-06,
+0.0,
+-4.2e-06,
+1.0,
+-6.3e-06,
+0.0,
+5.3e-06,
+6.3e-06,
+1.0,
+0.0,
+0.0134971,
+0.2681742,
+0.4334897,
+1.0
+],
+"explode": [
+0.0108,
+0.6875,
+0.0999
+],
+"mesh": "parts/arm_left_hand_link.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_right_shoulder_pitch",
+"label": "Right shoulder pitch link",
+"group": "arm",
+"mass_g": 342.88,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+2.7e-06,
+2.7e-06,
+0.0,
+-2.7e-06,
+1.0,
+0.0,
+0.0,
+-2.7e-06,
+-0.0,
+1.0,
+0.0,
+-0.0066122,
+-0.1727088,
+0.7640436,
+1.0
+],
+"explode": [
+-0.0038,
+-0.4916,
+0.2193
+],
+"mesh": "parts/arm_right_shoulder_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_right_shoulder_roll",
+"label": "Right shoulder roll link",
+"group": "arm",
+"mass_g": 443.94,
+"mass_opt_g": 402.8,
+"status": "verified",
+"matrix": [
+1.0,
+7.2e-06,
+-1.1e-06,
+0.0,
+-7.2e-06,
+1.0,
+1.1e-05,
+0.0,
+1.1e-06,
+-1.1e-05,
+1.0,
+0.0,
+-0.0022327,
+-0.1950363,
+0.6928268,
+1.0
+],
+"explode": [
+-0.0047,
+-0.5395,
+0.201
+],
+"mesh": "parts/arm_right_shoulder_roll.glb",
+"mesh_opt": "parts/arm_right_shoulder_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 28.8 of 30 MPa, deflection 0.40x original. Case: 250 N side load, from 20 N m joint limit at 80 mm.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$288 launch saving per part. Uses 89 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.25%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Hollow core, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 402.8,
+"mesh": "parts/arm_right_shoulder_roll_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.03251524151946228,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Hollowed the interior",
+"Kept outer walls, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "arm_right_shoulder_yaw",
+"label": "Right shoulder yaw link",
+"group": "arm",
+"mass_g": 329.2,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+-9e-07,
+-2.7e-06,
+0.0,
+9e-07,
+1.0,
+7.3e-06,
+0.0,
+2.7e-06,
+-7.3e-06,
+1.0,
+0.0,
+-1.62e-05,
+-0.2258636,
+0.608134,
+1.0
+],
+"explode": [
+0.003,
+-0.6205,
+0.1644
+],
+"mesh": "parts/arm_right_shoulder_yaw.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_right_elbow_pitch",
+"label": "Right elbow pitch link",
+"group": "arm",
+"mass_g": 443.94,
+"mass_opt_g": 402.8,
+"status": "verified",
+"matrix": [
+1.0,
+-9e-07,
+-2.7e-06,
+0.0,
+9e-07,
+1.0,
+1.2e-05,
+0.0,
+2.7e-06,
+-1.2e-05,
+1.0,
+0.0,
+-4.03e-05,
+-0.2411607,
+0.5333298,
+1.0
+],
+"explode": [
+0.003,
+-0.6322,
+0.1462
+],
+"mesh": "parts/arm_right_elbow_pitch.glb",
+"mesh_opt": "parts/arm_right_elbow_pitch_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 28.8 of 30 MPa, deflection 0.40x original. Case: 250 N side load, from 20 N m joint limit at 80 mm.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$288 launch saving per part. Uses 89 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.25%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Hollow core, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 402.8,
+"mesh": "parts/arm_right_elbow_pitch_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.03251524151946228,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Hollowed the interior",
+"Kept outer walls, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "arm_right_elbow_roll",
+"label": "Right elbow roll link",
+"group": "arm",
+"mass_g": 0.83,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+1e-06,
+-6e-06,
+0.0,
+-1e-06,
+1.0,
+7.3e-06,
+0.0,
+6e-06,
+-7.3e-06,
+1.0,
+0.0,
+-4e-07,
+-0.2530569,
+0.4803039,
+1.0
+],
+"explode": [
+0.003,
+-0.6618,
+0.12
+],
+"mesh": "parts/arm_right_elbow_roll.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "arm_right_hand_link",
+"label": "Right hand",
+"group": "arm",
+"mass_g": 291.74,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+4.8e-06,
+-9.8e-06,
+0.0,
+-4.8e-06,
+1.0,
+3.7e-06,
+0.0,
+9.8e-06,
+-3.7e-06,
+1.0,
+0.0,
+0.0134971,
+-0.2633709,
+0.4322026,
+1.0
+],
+"explode": [
+0.0108,
+-0.6785,
+0.0996
+],
+"mesh": "parts/arm_right_hand_link.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "leg_left_hip_roll",
+"label": "Left hip roll link",
+"group": "leg",
+"mass_g": 837.86,
+"mass_opt_g": 808.3,
+"status": "verified",
+"matrix": [
+1.0,
+-0.0,
+-0.0,
+0.0,
+0.0,
+1.0,
+0.0,
+0.0,
+-0.0,
+-0.0,
+1.0,
+0.0,
+-0.0648515,
+0.0798874,
+0.512683,
+1.0
+],
+"explode": [
+-0.0335,
+0.2775,
+-0.1025
+],
+"mesh": "parts/leg_left_hip_roll.glb",
+"mesh_opt": "parts/leg_left_hip_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 29.8 of 30 MPa, deflection 0.47x original. Case: 3 x body weight axial, 1.5 x side.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$207 launch saving per part. Uses 65 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.18%.",
+"basis": "calculated"
+}
+},
+"review": {
+"holes": 17,
+"rim_kept": 0.92281238058846,
+"thin_fraction": 0.1977012200743723,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"8% of the 3 mm rim around bolt holes was removed",
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 808.3,
+"mesh": "parts/leg_left_hip_roll_opt.glb",
+"status": "verified"
+}
+]
+},
+{
+"id": "leg_left_hip_yaw",
+"label": "Left hip yaw link",
+"group": "leg",
+"mass_g": 837.68,
+"mass_opt_g": 808.1,
+"status": "verified",
+"matrix": [
+1.0,
+-0.0,
+-3.3e-06,
+0.0,
+0.0,
+1.0,
+-2.5e-06,
+0.0,
+3.3e-06,
+2.5e-06,
+1.0,
+0.0,
+-0.0139426,
+0.0841161,
+0.4540644,
+1.0
+],
+"explode": [
+-0.0066,
+0.3126,
+-0.1624
+],
+"mesh": "parts/leg_left_hip_yaw.glb",
+"mesh_opt": "parts/leg_left_hip_yaw_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 29.8 of 30 MPa, deflection 0.47x original. Case: 3 x body weight axial, 1.5 x side.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$207 launch saving per part. Uses 65 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.18%.",
+"basis": "calculated"
+}
+},
+"review": {
+"holes": 17,
+"rim_kept": 0.92281238058846,
+"thin_fraction": 0.1977012200743723,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"8% of the 3 mm rim around bolt holes was removed",
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 808.1,
+"mesh": "parts/leg_left_hip_yaw_opt.glb",
+"status": "verified"
+}
+]
+},
+{
+"id": "leg_left_hip_pitch",
+"label": "Left hip pitch link",
+"group": "leg",
+"mass_g": 947.97,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+-0.0,
+-3.3e-06,
+0.0,
+0.0,
+1.0,
+2.2e-06,
+0.0,
+3.3e-06,
+-2.2e-06,
+1.0,
+0.0,
+-0.0069601,
+0.074092,
+0.3296119,
+1.0
+],
+"explode": [
+-0.002,
+0.3061,
+-0.2599
+],
+"mesh": "parts/leg_left_hip_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "leg_left_knee_pitch",
+"label": "Left knee link",
+"group": "leg",
+"mass_g": 653.86,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+-0.0,
+-3.3e-06,
+0.0,
+0.0,
+1.0,
+2.2e-06,
+0.0,
+3.3e-06,
+-2.2e-06,
+1.0,
+0.0,
+-0.00996,
+0.0607391,
+0.1877509,
+1.0
+],
+"explode": [
+-0.002,
+0.2697,
+-0.4179
+],
+"mesh": "parts/leg_left_knee_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "leg_left_ankle_pitch",
+"label": "Left ankle yoke",
+"group": "leg",
+"mass_g": 106.2,
+"mass_opt_g": 49.0,
+"status": "verified",
+"matrix": [
+1.0,
+-0.0,
+-8.7e-06,
+0.0,
+0.0,
+1.0,
+2.2e-06,
+0.0,
+8.7e-06,
+-2.2e-06,
+1.0,
+0.0,
+0.0031046,
+0.0594146,
+0.1126255,
+1.0
+],
+"explode": [
+-0.0009,
+0.2502,
+-0.5201
+],
+"mesh": "parts/leg_left_ankle_pitch.glb",
+"mesh_opt": "parts/leg_left_ankle_pitch_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 8.3 of 30 MPa, deflection 0.81x original. Case: 3 x body weight through ankle.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 3.6x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 54%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$400 launch saving per part. Uses 49 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.35%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Topology removal, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 49.0,
+"mesh": "parts/leg_left_ankle_pitch_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 18,
+"rim_kept": 1.0,
+"thin_fraction": 0.03757170625325934,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Removed low-stress regions through the plate",
+"Kept the load path, supports and bolt rims"
+],
+"issues": [
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "leg_left_ankle_roll",
+"label": "Left foot",
+"group": "leg",
+"mass_g": 706.48,
+"mass_opt_g": 454.3,
+"status": "verified",
+"matrix": [
+1.0,
+-0.0,
+-8.7e-06,
+0.0,
+0.0,
+1.0,
+2.2e-06,
+0.0,
+8.7e-06,
+-2.2e-06,
+1.0,
+0.0,
+0.0397813,
+0.0569762,
+0.0673384,
+1.0
+],
+"explode": [
+0.016,
+0.2177,
+-0.5578
+],
+"mesh": "parts/leg_left_ankle_roll.glb",
+"mesh_opt": "parts/leg_left_ankle_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 13.0 of 30 MPa, deflection 0.86x original. Case: 3 x body weight on toe, then on heel.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 2.3x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 51%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$1,765 launch saving per part. Uses 197 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 1.54%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 454.3,
+"mesh": "parts/leg_left_ankle_roll_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.2344500396325826,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "leg_right_hip_roll",
+"label": "Right hip roll link",
+"group": "leg",
+"mass_g": 837.86,
+"mass_opt_g": 808.3,
+"status": "verified",
+"matrix": [
+1.0,
+-8e-07,
+0.0,
+0.0,
+8e-07,
+1.0,
+1.9e-06,
+0.0,
+-0.0,
+-1.9e-06,
+1.0,
+0.0,
+-0.0648412,
+-0.0798149,
+0.5126932,
+1.0
+],
+"explode": [
+-0.0335,
+-0.2785,
+-0.1025
+],
+"mesh": "parts/leg_right_hip_roll.glb",
+"mesh_opt": "parts/leg_right_hip_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 29.8 of 30 MPa, deflection 0.47x original. Case: 3 x body weight axial, 1.5 x side.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$207 launch saving per part. Uses 65 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.18%.",
+"basis": "calculated"
+}
+},
+"review": {
+"holes": 17,
+"rim_kept": 0.92281238058846,
+"thin_fraction": 0.1977012200743723,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"8% of the 3 mm rim around bolt holes was removed",
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 808.3,
+"mesh": "parts/leg_right_hip_roll_opt.glb",
+"status": "verified"
+}
+]
+},
+{
+"id": "leg_right_hip_yaw",
+"label": "Right hip yaw link",
+"group": "leg",
+"mass_g": 837.68,
+"mass_opt_g": 808.1,
+"status": "verified",
+"matrix": [
+1.0,
+2.5e-06,
+-3.3e-06,
+0.0,
+-2.5e-06,
+1.0,
+-2.7e-06,
+0.0,
+3.3e-06,
+2.7e-06,
+1.0,
+0.0,
+-0.014004,
+-0.0841162,
+0.4540234,
+1.0
+],
+"explode": [
+-0.0066,
+-0.3136,
+-0.1624
+],
+"mesh": "parts/leg_right_hip_yaw.glb",
+"mesh_opt": "parts/leg_right_hip_yaw_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 29.8 of 30 MPa, deflection 0.47x original. Case: 3 x body weight axial, 1.5 x side.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 1.0x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 80%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$207 launch saving per part. Uses 65 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.18%.",
+"basis": "calculated"
+}
+},
+"review": {
+"holes": 17,
+"rim_kept": 0.92281238058846,
+"thin_fraction": 0.1977012200743723,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"8% of the 3 mm rim around bolt holes was removed",
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 808.1,
+"mesh": "parts/leg_right_hip_yaw_opt.glb",
+"status": "verified"
+}
+]
+},
+{
+"id": "leg_right_hip_pitch",
+"label": "Right hip pitch link",
+"group": "leg",
+"mass_g": 947.97,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+2.5e-06,
+-3.3e-06,
+0.0,
+-2.5e-06,
+1.0,
+7.3e-06,
+0.0,
+3.3e-06,
+-7.3e-06,
+1.0,
+0.0,
+-0.0068012,
+-0.0740918,
+0.3296119,
+1.0
+],
+"explode": [
+-0.002,
+-0.3071,
+-0.2599
+],
+"mesh": "parts/leg_right_hip_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "leg_right_knee_pitch",
+"label": "Right knee link",
+"group": "leg",
+"mass_g": 653.86,
+"mass_opt_g": null,
+"status": "untouched",
+"matrix": [
+1.0,
+2.5e-06,
+-3.3e-06,
+0.0,
+-2.5e-06,
+1.0,
+7.3e-06,
+0.0,
+3.3e-06,
+-7.3e-06,
+1.0,
+0.0,
+-0.0100519,
+-0.0607386,
+0.1877509,
+1.0
+],
+"explode": [
+-0.002,
+-0.2707,
+-0.4179
+],
+"mesh": "parts/leg_right_knee_pitch.glb",
+"mesh_opt": null,
+"checks": {}
+},
+{
+"id": "leg_right_ankle_pitch",
+"label": "Right ankle yoke",
+"group": "leg",
+"mass_g": 106.2,
+"mass_opt_g": 49.0,
+"status": "verified",
+"matrix": [
+1.0,
+2.5e-06,
+-3.3e-06,
+0.0,
+-2.5e-06,
+1.0,
+7.3e-06,
+0.0,
+3.3e-06,
+-7.3e-06,
+1.0,
+0.0,
+0.0031053,
+-0.0594139,
+0.1126256,
+1.0
+],
+"explode": [
+-0.0009,
+-0.2512,
+-0.5201
+],
+"mesh": "parts/leg_right_ankle_pitch.glb",
+"mesh_opt": "parts/leg_right_ankle_pitch_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 8.3 of 30 MPa, deflection 0.81x original. Case: 3 x body weight through ankle.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 3.6x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 54%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$400 launch saving per part. Uses 49 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 0.35%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Topology removal, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 49.0,
+"mesh": "parts/leg_right_ankle_pitch_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 18,
+"rim_kept": 1.0,
+"thin_fraction": 0.03757170625325934,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Removed low-stress regions through the plate",
+"Kept the load path, supports and bolt rims"
+],
+"issues": [
+"Fit, fatigue and impact are untested"
+]
+}
+},
+{
+"id": "leg_right_ankle_roll",
+"label": "Right foot",
+"group": "leg",
+"mass_g": 706.48,
+"mass_opt_g": 454.3,
+"status": "verified",
+"matrix": [
+1.0,
+2.5e-06,
+-3.3e-06,
+0.0,
+-2.5e-06,
+1.0,
+7.3e-06,
+0.0,
+3.3e-06,
+-7.3e-06,
+1.0,
+0.0,
+0.0397822,
+-0.0570213,
+0.0673387,
+1.0
+],
+"explode": [
+0.016,
+-0.2187,
+-0.5578
+],
+"mesh": "parts/leg_right_ankle_roll.glb",
+"mesh_opt": "parts/leg_right_ankle_roll_opt.glb",
+"checks": {
+"mechanical": {
+"status": "pass",
+"summary": "Peak 13.0 of 30 MPa, deflection 0.86x original. Case: 3 x body weight on toe, then on heel.",
+"basis": "simulated"
+},
+"reliability": {
+"status": "warn",
+"summary": "Static margin 2.3x. Fatigue and impact are untested, and voxel corners need smoothing.",
+"basis": "calculated"
+},
+"thermal": {
+"status": "warn",
+"summary": "Solid fill falls to 51%, so heat paths through this part shrink about the same. Not simulated.",
+"basis": "assumed"
+},
+"electrical": {
+"status": "na",
+"summary": "No circuit in this part. Carbon fiber can conduct slightly, so keep wiring insulated.",
+"basis": "assumed"
+},
+"cost": {
+"status": "pass",
+"summary": "$1,765 launch saving per part. Uses 197 g of filament at about $90/kg.",
+"basis": "calculated"
+},
+"power": {
+"status": "pass",
+"summary": "Reduces supported robot weight by 1.54%.",
+"basis": "calculated"
+}
+},
+"designs": [
+{
+"id": "topo_cf",
+"label": "Honeycomb, Nylon 12 + CF",
+"material": "Nylon 12 + CF",
+"mass_g": 454.3,
+"mesh": "parts/leg_right_ankle_roll_opt.glb",
+"status": "verified"
+}
+],
+"review": {
+"holes": 14,
+"rim_kept": 1.0,
+"thin_fraction": 0.2344500396325826,
+"pieces": 1,
+"verdict": "warn",
+"changes": [
+"Replaced the solid core with hexagonal cells",
+"Kept outer skins, supports and bolt rims"
+],
+"issues": [
+"Internal cavities need a print path and a way to clear support or powder",
+"Fit, fatigue and impact are untested"
+]
+}
+}
+]
+}

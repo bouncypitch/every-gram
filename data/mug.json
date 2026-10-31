@@ -1,0 +1,79 @@
+{
+ "title": "Coffee mug",
+ "subject": "Generic 82 x 95 mm mug holding 350 ml, not a specific product",
+ "load": "Full mug lifted at 3 g",
+ "designs": [
+  {
+   "design": "Ceramic, 5 mm wall",
+   "mass_g": 367,
+   "saved_pct": 0,
+   "peak_mpa": 0.5,
+   "limit_mpa": 20,
+   "tradeoff": "Durable and familiar",
+   "basis": "simulated",
+   "status": "baseline"
+  },
+  {
+   "design": "Ceramic, 3.5 mm wall",
+   "mass_g": 283,
+   "saved_pct": 23,
+   "peak_mpa": 0.7,
+   "limit_mpa": 20,
+   "tradeoff": "Slightly easier to chip",
+   "basis": "simulated",
+   "status": "verified"
+  },
+  {
+   "design": "Porcelain, 2.5 mm wall",
+   "mass_g": 220,
+   "saved_pct": 40,
+   "peak_mpa": 1.0,
+   "limit_mpa": 30,
+   "tradeoff": "Holds less heat. Static lift only: chipping and drops are untested",
+   "basis": "simulated",
+   "status": "verified",
+   "pick": "Everyday"
+  },
+  {
+   "design": "Double-wall vacuum stainless, 0.4 mm",
+   "mass_g": 254,
+   "saved_pct": 31,
+   "peak_mpa": null,
+   "limit_mpa": null,
+   "tradeoff": "Best heat retention",
+   "basis": "calculated",
+   "status": "estimated"
+  },
+  {
+   "design": "Double-wall vacuum titanium, 0.4 mm",
+   "mass_g": 149,
+   "saved_pct": 59,
+   "peak_mpa": null,
+   "limit_mpa": null,
+   "tradeoff": "Best heat retention, expensive",
+   "basis": "calculated",
+   "status": "estimated",
+   "pick": "Travel"
+  },
+  {
+   "design": "Single-wall titanium, 0.5 mm",
+   "mass_g": 103,
+   "saved_pct": 72,
+   "peak_mpa": null,
+   "limit_mpa": null,
+   "tradeoff": "Lightest, hot to hold, loses heat fastest",
+   "basis": "calculated",
+   "status": "estimated"
+  }
+ ],
+ "before": "data/examples/mug-before.glb",
+ "after": "data/examples/mug-after.glb",
+ "sense": [
+  "Holes and lattices rejected, because a mug must hold liquid",
+  "Lifting is not the limit: about 1 MPa against a 20 to 30 MPa limit",
+  "Chipping and drops decide ceramic wall thickness, and this static test cannot check them",
+  "Heat retention is qualitative here, not simulated",
+  "Tipping angle stays near 31 degrees in a rough calculation, though a lighter mug slides more easily"
+ ],
+ "line": "For a robot we remove material. For a mug, physics says the walls were never the problem."
+}
