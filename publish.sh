@@ -3,7 +3,7 @@
 set -e
 cd ~/Code/every-gram
 (cd web && npm run build)
-if ! git grep -qE 'sk-ant-|fc-[0-9a-f]{20,}' -- . && ! grep -rqE 'sk-ant-|fc-[0-9a-f]{20,}' web/dist; then echo "secret scan clean"; else echo "SECRET FOUND, stopping"; exit 1; fi
+if ! git grep -qE 'sk-ant-|fc-[0-9a-f]{20,}' -- . ':!publish.sh' && ! grep -rqE 'sk-ant-|fc-[0-9a-f]{20,}' web/dist; then echo "secret scan clean"; else echo "SECRET FOUND, stopping"; exit 1; fi
 git remote get-url origin >/dev/null 2>&1 || gh repo create bouncypitch/every-gram --public --source=. --remote=origin
 git push -u origin main
 P=$(mktemp -d); cp -R web/dist/. $P/; touch $P/.nojekyll
